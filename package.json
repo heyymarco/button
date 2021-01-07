@@ -1,0 +1,34 @@
+{
+  "name": "@heymarco/button",
+  "version": "1.0.0",
+  "description": "A button UI with built in icon set.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heyymarco/button.git"
+  },
+  "keywords": [
+    "button",
+    "click",
+    "ui",
+    "control"
+  ],
+  "author": "HeyMarco",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/heyymarco/button/issues"
+  },
+  "homepage": "https://github.com/heyymarco/button#readme",
+  "dependencies": {
+    "@heymarco/colors": "^1.0.15",
+    "@heymarco/control": "^1.0.15",
+    "@heymarco/element": "^1.0.12",
+    "@heymarco/element-config": "^1.0.3",
+    "@heymarco/icon": "^1.0.8",
+    "@heymarco/sass-class-template": "^1.0.6",
+    "@heymarco/sass-selector": "^1.0.5"
+  }
+}

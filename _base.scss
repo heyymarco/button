@@ -1,0 +1,260 @@
+// A base button.
+
+
+
+// development:
+@use "node_modules/@heymarco/sass-class-template/index" as *;
+@use "node_modules/@heymarco/sass-selector/index"       as selector;
+@use "node_modules/@heymarco/control/index"             as base;
+@use "node_modules/@heymarco/element/index"             as element;
+@use "node_modules/@heymarco/colors/index"              as color;
+
+// production:
+// @use "../../../node_modules/@heymarco/sass-class-template/index" as *;
+// @use "../../../node_modules/@heymarco/sass-selector/index"       as selector;
+// @use "../../../node_modules/@heymarco/control/index"             as base;
+// @use "../../../node_modules/@heymarco/element/index"             as element;
+// @use "../../../node_modules/@heymarco/colors/index"              as color;
+
+
+
+$alias              : "%button-base"                        !default;
+$class              : "button, .btn"                        !default;
+$var-root           : base.$var-root                        !default;
+$var-prefix         : "btn"                                 !default;
+$var-prefix-base    : ""                                    !default;
+$cssvar: make-cssvar($var-prefix, $var-prefix-base);
+
+/*base*/$backg              : var(#{base.$cssvar}backg)                     !default;
+/*base*/$backg-gradient     : var(#{base.$cssvar}backg-gradient)            !default;
+/*base*/$color              : var(#{base.$cssvar}color)                     !default;
+
+/*base*/$font-size          : var(#{base.$cssvar}font-size)                 !default;
+/*base*/$font-size-sm       : var(#{base.$cssvar}font-size-sm)              !default;
+/*base*/$font-size-lg       : var(#{base.$cssvar}font-size-lg)              !default;
+/*base*/$font-family        : var(#{base.$cssvar}font-family)               !default;
+/*base*/$font-weight        : var(#{base.$cssvar}font-weight)               !default;
+/*base*/$font-style         : var(#{base.$cssvar}font-style)                !default;
+/*base*/$text-decoration    : var(#{base.$cssvar}text-decoration)           !default;
+/*base*/$lineheight         : var(#{base.$cssvar}lineheight)                !default;
+
+/*base*/$padding-x          : var(#{base.$cssvar}padding-x)                 !default;
+/*base*/$padding-y          : var(#{base.$cssvar}padding-y)                 !default;
+/*base*/$padding-x-sm       : var(#{base.$cssvar}padding-x-sm)              !default;
+/*base*/$padding-y-sm       : var(#{base.$cssvar}padding-y-sm)              !default;
+/*base*/$padding-x-lg       : var(#{base.$cssvar}padding-x-lg)              !default;
+/*base*/$padding-y-lg       : var(#{base.$cssvar}padding-y-lg)              !default;
+
+/*base*/$border             : var(#{base.$cssvar}border)                    !default;
+/*base*/$border-radius      : var(#{base.$cssvar}border-radius)             !default;
+/*base*/$border-radius-sm   : var(#{base.$cssvar}border-radius-sm)          !default;
+/*base*/$border-radius-lg   : var(#{base.$cssvar}border-radius-lg)          !default;
+
+/*base*/$box-shadow         : var(#{base.$cssvar}box-shadow)                !default;
+/*base*/$box-shadow-focus   : var(#{base.$cssvar}box-shadow-focus)          !default;
+
+/*base*/$cursor-enabled     : var(#{base.$cssvar}cursor-enabled)            !default;
+/*base*/$cursor-disabled    : var(#{base.$cssvar}cursor-disabled)           !default;
+
+/*base*/$transition         : var(#{base.$cssvar}transition)                !default;
+
+/*base*/$filter             : var(#{base.$cssvar}filter)                    !default;
+/*base*/$filter-hover       : var(#{base.$cssvar}filter-hover)              !default;
+/*base*/$filter-active      : var(#{base.$cssvar}filter-active)             !default;
+/*base*/$filter-disabled    : var(#{base.$cssvar}filter-disabled)           !default;
+
+/*base*/$anim               : var(#{base.$cssvar}anim)                      !default;
+/*base*/$anim-hover         : 150ms ease-out both #{$cssvar}anim-hover      !default;
+/*base*/$anim-leave         : 300ms ease-out both #{$cssvar}anim-leave      !default;
+/*base*/$anim-focus         : 150ms ease-out both #{$cssvar}anim-focus      !default;
+/*base*/$anim-blur          : 300ms ease-out both #{$cssvar}anim-blur       !default;
+/*base*/$anim-active        : 150ms ease-out both #{$cssvar}anim-active     !default;
+/*base*/$anim-passive       : 300ms ease-out both #{$cssvar}anim-passive    !default;
+/*base*/$anim-enabled       : 150ms ease-out both #{$cssvar}anim-enabled    !default;
+/*base*/$anim-disabled      : 300ms ease-out both #{$cssvar}anim-disabled   !default;
+
+/*addn*/$orientation        : row                                           !default;
+/*addn*/$white-space        : normal                                        !default;
+
+/*addn*/$gap-x              : calc(var(#{$cssvar}padding-x) * 0.5)          !default;
+/*addn*/$gap-y              : calc(var(#{$cssvar}padding-y) * 0.5)          !default;
+/*addn*/$gap-x-sm           : calc(var(#{$cssvar}padding-x-sm) * 0.5)       !default;
+/*addn*/$gap-y-sm           : calc(var(#{$cssvar}padding-y-sm) * 0.5)       !default;
+/*addn*/$gap-x-lg           : calc(var(#{$cssvar}padding-x-lg) * 0.5)       !default;
+/*addn*/$gap-y-lg           : calc(var(#{$cssvar}padding-y-lg) * 0.5)       !default;
+
+
+
+/* begin: states */
+@mixin state-hover        { @include base.state-hover        { @content; }}
+@mixin state-not-hover    { @include base.state-not-hover    { @content; }}
+@mixin state-leave        { @include base.state-leave        { @content; }}
+@mixin state-not-leave    { @include base.state-not-leave    { @content; }}
+
+
+@mixin state-focus        { @include base.state-focus        { @content; }}
+@mixin state-not-focus    { @include base.state-not-focus    { @content; }}
+@mixin state-blur         { @include base.state-blur         { @content; }}
+@mixin state-not-blur     { @include base.state-not-blur     { @content; }}
+
+@mixin state-active       { @include base.state-active       { @content; }}
+@mixin state-not-active   { @include base.state-not-active   { @content; }}
+@mixin state-passive      { @include base.state-passive      { @content; }}
+@mixin state-not-passive  { @include base.state-not-passive  { @content; }}
+
+
+@mixin state-disabled     { @include base.state-disabled     { @content; }}
+@mixin state-not-disabled { @include base.state-not-disabled { @content; }}
+@mixin state-enabled      { @include base.state-enabled      { @content; }}
+@mixin state-not-enabled  { @include base.state-not-enabled  { @content; }}
+/* end: states */
+
+
+
+@include declare-cssvar($var-root) {
+    /*base*/#{$cssvar}backg             : $backg;
+    /*base*/#{$cssvar}backg-gradient    : $backg-gradient;
+    /*base*/#{$cssvar}color             : $color;
+
+    /*base*/#{$cssvar}font-size         : $font-size;
+    /*base*/#{$cssvar}font-size-sm      : $font-size-sm;
+    /*base*/#{$cssvar}font-size-lg      : $font-size-lg;
+    /*base*/#{$cssvar}font-family       : $font-family;
+    /*base*/#{$cssvar}font-weight       : $font-weight;
+    /*base*/#{$cssvar}font-style        : $font-style;
+    /*base*/#{$cssvar}text-decoration   : $text-decoration;
+    /*base*/#{$cssvar}lineheight        : $lineheight;
+
+    /*base*/#{$cssvar}padding-x         : $padding-x;
+    /*base*/#{$cssvar}padding-y         : $padding-y;
+    /*base*/#{$cssvar}padding-x-sm      : $padding-x-sm;
+    /*base*/#{$cssvar}padding-y-sm      : $padding-y-sm;
+    /*base*/#{$cssvar}padding-x-lg      : $padding-x-lg;
+    /*base*/#{$cssvar}padding-y-lg      : $padding-y-lg;
+    
+    /*base*/#{$cssvar}border            : $border;
+    /*base*/#{$cssvar}border-radius     : $border-radius;
+    /*base*/#{$cssvar}border-radius-sm  : $border-radius-sm;
+    /*base*/#{$cssvar}border-radius-lg  : $border-radius-lg;
+
+    /*base*/#{$cssvar}box-shadow        : $box-shadow;
+    /*base*/#{$cssvar}box-shadow-focus  : $box-shadow-focus;
+
+    /*base*/#{$cssvar}cursor-enabled    : $cursor-enabled;
+    /*base*/#{$cssvar}cursor-disabled   : $cursor-disabled;
+
+    /*base*/#{$cssvar}transition        : $transition;
+
+    /*base*/#{$cssvar}filter            : $filter;
+    /*base*/#{$cssvar}filter-hover      : $filter-hover;
+    /*base*/#{$cssvar}filter-active     : $filter-active;
+    /*base*/#{$cssvar}filter-disabled   : $filter-disabled;
+
+    /*base*/#{$cssvar}anim              : $anim;
+    /*base*/#{$cssvar}anim-hover        : $anim-hover;
+    /*base*/#{$cssvar}anim-leave        : $anim-leave;
+    /*base*/#{$cssvar}anim-focus        : $anim-focus;
+    /*base*/#{$cssvar}anim-blur         : $anim-blur;
+    /*base*/#{$cssvar}anim-active       : $anim-active;
+    /*base*/#{$cssvar}anim-passive      : $anim-passive;
+    /*base*/#{$cssvar}anim-enabled      : $anim-enabled;
+    /*base*/#{$cssvar}anim-disabled     : $anim-disabled;
+
+    /*addn*/#{$cssvar}orientation       : $orientation;
+    /*addn*/#{$cssvar}white-space       : $white-space;
+
+    /*addn*/#{$cssvar}gap-x             : $gap-x;
+    /*addn*/#{$cssvar}gap-y             : $gap-y;
+    /*addn*/#{$cssvar}gap-x-sm          : $gap-x-sm;
+    /*addn*/#{$cssvar}gap-y-sm          : $gap-y-sm;
+    /*addn*/#{$cssvar}gap-x-lg          : $gap-x-lg;
+    /*addn*/#{$cssvar}gap-y-lg          : $gap-y-lg;
+
+
+
+    // variant-theme: background, color, border:
+    @each $theme-name, $theme-color in color.$themes {
+        // background:
+        /*base*/#{$cssvar}backg-#{$theme-name}              : var(#{base.$cssvar}backg-#{$theme-name});
+
+        // color:
+        /*base*/#{$cssvar}color-#{$theme-name}              : var(#{base.$cssvar}color-#{$theme-name});
+
+        // box-shadow-focus:
+        /*base*/#{$cssvar}box-shadow-focus-#{$theme-name}   : var(#{base.$cssvar}box-shadow-focus-#{$theme-name});
+    }
+}
+
+
+
+/* begin: general style */
+@mixin _style($include, $cssvar: $cssvar) {
+    @include  base.style($cssvar);
+
+
+    column-gap      : var(#{$cssvar}gap-x);
+    row-gap         : var(#{$cssvar}gap-y);
+
+    
+    // flex settings:
+    display         : inline-flex;
+    flex-direction  : var(#{$cssvar}orientation);
+    justify-content : center;
+    align-items     : center;
+
+    // typo settings:
+    text-align      : center;
+    vertical-align  : middle;
+    white-space     : var(#{$cssvar}white-space);
+
+    user-select     : none; // disable selecting button's text
+
+
+
+    /* begin: variant-size: font-size, padding, border-radius */
+    @each $size in (sm, lg) { @include selector.append("." + $size) {
+        column-gap  : var(#{$cssvar}gap-x-#{$size});
+        row-gap     : var(#{$cssvar}gap-y-#{$size});
+    }}
+    /* end: variant-size: font-size, padding, border-radius */
+
+
+
+    /* begin: variant-outline */
+    @at-root { #{$alias}-outline {
+        @each $theme-name, $theme-color in color.$themes { @include selector.append("." + $theme-name) {
+            #{$cssvar}backg         : rgba(255, 255, 255, 0); // transparent white
+
+            #{$cssvar}color         : hsl(
+                calc(var(#{element.$cssvar}backg-#{$theme-name}-h) * 1deg),
+                calc(var(#{element.$cssvar}backg-#{$theme-name}-s) * 100%),
+                calc(var(#{element.$cssvar}backg-#{$theme-name}-l) * 100%)
+            );
+
+            border-color            : var(#{$cssvar}color);
+        }}
+    }}
+    @include selector.append(".outline") {
+        @include state-not-hover {
+        @include state-not-active {
+            @extend #{$alias}-outline;
+        }}
+        @include state-disabled {
+        @include state-not-active {
+            @extend #{$alias}-outline;
+        }}
+    }
+    /* end: variant-outline */
+}
+@mixin style($cssvar: $cssvar) {
+    @include _style(true, $cssvar);
+}
+@include alias($alias) {
+    @include _style(false);
+}
+/* end: general style */
+
+
+
+// abstract class => no emit class
+@include class($alias, $class, base.$class);
