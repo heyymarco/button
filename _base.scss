@@ -8,6 +8,8 @@
 @use "node_modules/@heymarco/control/index"             as base;
 @use "node_modules/@heymarco/element/index"             as element;
 @use "node_modules/@heymarco/colors/index"              as color;
+@use "node_modules/@heymarco/spacer/index"              as spacer;
+@use "node_modules/@heymarco/border/index"              as border;
 
 // production:
 // @use "../../../node_modules/@heymarco/sass-class-template/index" as *;
@@ -15,11 +17,13 @@
 // @use "../../../node_modules/@heymarco/control/index"             as base;
 // @use "../../../node_modules/@heymarco/element/index"             as element;
 // @use "../../../node_modules/@heymarco/colors/index"              as color;
+// @use "../../../node_modules/@heymarco/spacer/index"              as spacer;
+// @use "../../../node_modules/@heymarco/border/index"              as border;
 
 
 
 $alias              : "%button-base"                        !default;
-$class              : "button, .btn"                        !default;
+$class              : "button, .btn, a.link"                !default;
 $var-root           : base.$var-root                        !default;
 $var-prefix         : "btn"                                 !default;
 $var-prefix-base    : ""                                    !default;
@@ -76,12 +80,12 @@ $cssvar: make-cssvar($var-prefix, $var-prefix-base);
 /*addn*/$orientation        : row                                           !default;
 /*addn*/$white-space        : normal                                        !default;
 
-/*addn*/$gap-x              : calc(var(#{$cssvar}padding-x) * 0.5)          !default;
-/*addn*/$gap-y              : calc(var(#{$cssvar}padding-y) * 0.5)          !default;
-/*addn*/$gap-x-sm           : calc(var(#{$cssvar}padding-x-sm) * 0.5)       !default;
-/*addn*/$gap-y-sm           : calc(var(#{$cssvar}padding-y-sm) * 0.5)       !default;
-/*addn*/$gap-x-lg           : calc(var(#{$cssvar}padding-x-lg) * 0.5)       !default;
-/*addn*/$gap-y-lg           : calc(var(#{$cssvar}padding-y-lg) * 0.5)       !default;
+/*addn*/$gap-x              : calc(var(#{$cssvar}padding-x)    * 0.35)      !default;
+/*addn*/$gap-y              : calc(var(#{$cssvar}padding-y)    * 0.35)      !default;
+/*addn*/$gap-x-sm           : calc(var(#{$cssvar}padding-x-sm) * 0.35)      !default;
+/*addn*/$gap-y-sm           : calc(var(#{$cssvar}padding-y-sm) * 0.35)      !default;
+/*addn*/$gap-x-lg           : calc(var(#{$cssvar}padding-x-lg) * 0.35)      !default;
+/*addn*/$gap-y-lg           : calc(var(#{$cssvar}padding-y-lg) * 0.35)      !default;
 
 
 
@@ -211,12 +215,12 @@ $cssvar: make-cssvar($var-prefix, $var-prefix-base);
 
 
 
-    /* begin: variant-size: font-size, padding, border-radius */
+    /* begin: variant-size: gap-x, gap-y */
     @each $size in (sm, lg) { @include selector.append("." + $size) {
         column-gap  : var(#{$cssvar}gap-x-#{$size});
         row-gap     : var(#{$cssvar}gap-y-#{$size});
     }}
-    /* end: variant-size: font-size, padding, border-radius */
+    /* end: variant-size: gap-x, gap-y */
 
 
 
@@ -237,14 +241,56 @@ $cssvar: make-cssvar($var-prefix, $var-prefix-base);
     @include selector.append(".outline") {
         @include state-not-hover {
         @include state-not-active {
-            @extend #{$alias}-outline;
+            @extend #{$alias}-outline; // untouched => outline set
         }}
         @include state-disabled {
         @include state-not-active {
-            @extend #{$alias}-outline;
+            @extend #{$alias}-outline; // inactive disabled => hover => outline set
         }}
+
+        @include selector.append(".link") {
+            @extend #{$alias}-outline; // link => outline always set
+        }
     }
     /* end: variant-outline */
+
+
+
+    /* begin: variant-link */
+    @include selector.append(".link") {
+        @each $theme-name, $theme-color in color.$themes { @include selector.append("." + $theme-name) {
+            #{$cssvar}backg         : rgba(255, 255, 255, 0); // transparent white
+
+            #{$cssvar}color         : hsl(
+                calc(var(#{element.$cssvar}backg-#{$theme-name}-h) * 1deg),
+                calc(var(#{element.$cssvar}backg-#{$theme-name}-s) * 100%),
+                calc(var(#{element.$cssvar}backg-#{$theme-name}-l) * 100%)
+            );
+        }}
+
+        @include selector.append-not(".outline") {
+            border-style            : none;
+        }
+
+
+        
+        #{$cssvar}backg-gradient    : linear-gradient(transparent, transparent);
+
+        #{$cssvar}text-decoration   : underline;
+        #{$cssvar}lineheight        : 1;
+
+        #{$cssvar}padding-x         : var(#{spacer.$cssvar}xs);
+        #{$cssvar}padding-y         : var(#{spacer.$cssvar}xs);
+        #{$cssvar}padding-x-sm      : var(#{spacer.$cssvar}xs);
+        #{$cssvar}padding-y-sm      : var(#{spacer.$cssvar}xs);
+        #{$cssvar}padding-x-lg      : var(#{spacer.$cssvar}xs);
+        #{$cssvar}padding-y-lg      : var(#{spacer.$cssvar}xs);
+
+        #{$cssvar}border-radius     : var(#{border.$radius-cssvar}xs);
+        #{$cssvar}border-radius-sm  : var(#{border.$radius-cssvar}xs);
+        #{$cssvar}border-radius-lg  : var(#{border.$radius-cssvar}xs);
+    }
+    /* end: variant-link */
 }
 @mixin style($cssvar: $cssvar) {
     @include _style(true, $cssvar);
@@ -257,4 +303,4 @@ $cssvar: make-cssvar($var-prefix, $var-prefix-base);
 
 
 // abstract class => no emit class
-@include class($alias, $class, base.$class);
+// @include class($alias, $class, base.$class);

@@ -29,25 +29,30 @@ $alias          : "%button"                                 !default;
 @mixin _style-of($item, $include) {
     $item-n: icon.normalize-class($item);
 
+
+    // @if ($include) { @include base.style-of($item-n); }
+    // @else          { @extend #{base.$alias}-#{$item-n} !optional; }
+
+
     @if ($include) { @include icon.style-of($item-n); }
     @else          { @extend #{icon.$alias}-#{$item-n} !optional; }
 }
 @mixin style-of($item) {
     @include _style-of($item, true);
-
-    //items => implicitly included from style basic: @include style-basic;
 }
 @each $item-n, $content in icon.$items-n {
     @include alias-of($alias, $item-n) {
         @include _style-of($item-n, false);
-
-        //items => implicitly included from style basic: @extend #{$alias}--;
     }
 }
 /* end: item-specific (-specific) style */
 
 /* begin: item-any (-) style */
 @mixin _style-any($include) {
+    // @if ($include) { @include base.style-any; }
+    // @else          { @extend #{base.$alias}- !optional; }
+
+
     @if ($include) { @include icon.style-any; }
     @else          { @extend #{icon.$alias}- !optional; }
 }
@@ -63,17 +68,17 @@ $alias          : "%button"                                 !default;
 
 /* begin: basic (--) style */
 @mixin _style-basic($include) {
+    @if ($include) { @include base.style; }
+    @else          { @extend #{base.$alias} !optional; }
+
+
     @if ($include) { @include icon.style-basic; }
     @else          { @extend #{icon.$alias}-- !optional; }
 }
 @mixin style-basic {
-    @include base.style;
-
     @include _style-basic(true);
 }
 @include alias-basic($alias) {
-    @extend #{base.$alias} !optional;
-
     @include _style-basic(false);
 }
 /* end: basic (--) style */

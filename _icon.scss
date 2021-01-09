@@ -44,6 +44,12 @@ $pseudo-elm         : "::before"                            !default;
 @mixin _style-of($item, $include) {
     $item-n: normalize-class($item);
 
+
+    //sub-class => implicitly included from base:
+    // @if ($include) { @include base.style-of($item-n); }
+    // @else          { @extend #{base.$alias}-#{$item-n} !optional; }
+
+    
     @include selector.append($pseudo-elm) {
         @if ($include) { @include icon.style-of($item-n); }
         @else          { @extend #{icon.$alias}-#{$item-n} !optional; }
@@ -51,14 +57,10 @@ $pseudo-elm         : "::before"                            !default;
 }
 @mixin style-of($item) {
     @include _style-of($item, true);
-
-    //items => implicitly included from style basic: @include style-basic;
 }
 @each $item-n, $content in icon.$items-n {
     @include alias-of($alias, $item-n) {
         @include _style-of($item-n, false);
-
-        //items => implicitly included from style basic: @extend #{$alias}--;
     }
 }
 /* end: item-specific (-specific) style */
@@ -82,28 +84,31 @@ $pseudo-elm         : "::before"                            !default;
 
 /* begin: basic (--) style */
 @mixin _style-basic($include) {
+    //sub-class => implicitly included from base:
+    // @if ($include) { @include base.style; }
+    // @else          { @extend #{base.$alias} !optional; }
+
+
     @include selector.append($pseudo-elm) {
         @if ($include) { @include icon.style-basic; }
         @else          { @extend #{icon.$alias}-- !optional; }
 
         content: var(#{icon.$font-cssvar}content);
+
+        // transform: translateY(1px); // a bit tune up
     }
 
 
-    /* begin: variant-size */
-    #{icon.$cssvar}size     : calc(var(#{base.$cssvar}font-size) * var(#{base.$cssvar}lineheight));
+    /* begin: overwrite icon's variant-size */
+    #{icon.$cssvar}size     : calc(var(#{base.$cssvar}font-size)    * var(#{base.$cssvar}lineheight));
     #{icon.$cssvar}size-sm  : calc(var(#{base.$cssvar}font-size-sm) * var(#{base.$cssvar}lineheight));
     #{icon.$cssvar}size-lg  : calc(var(#{base.$cssvar}font-size-lg) * var(#{base.$cssvar}lineheight));
-    /* end: variant-size */
+    /* end: overwrite icon's variant-size */
 }
 @mixin style-basic {
-    //sub-class => implicitly included from base: @include base.style;
-
     @include _style-basic(true);
 }
 @include alias-basic($alias) {
-    //sub-class => implicitly included from base: @extend #{base.$alias} !optional;
-
     @include _style-basic(false);
 }
 /* end: basic (--) style */
