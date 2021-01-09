@@ -24,12 +24,12 @@
   "homepage": "https://github.com/heyymarco/button#readme",
   "dependencies": {
     "@heymarco/border": "^1.0.8",
-    "@heymarco/colors": "^1.0.15",
-    "@heymarco/control": "^1.0.15",
-    "@heymarco/element": "^1.0.12",
+    "@heymarco/colors": "^1.0.16",
+    "@heymarco/control": "^1.0.16",
+    "@heymarco/element": "^1.0.13",
     "@heymarco/element-config": "^1.0.3",
     "@heymarco/icon": "^1.0.9",
-    "@heymarco/sass-class-template": "^1.0.6",
+    "@heymarco/sass-class-template": "^1.0.7",
     "@heymarco/sass-selector": "^1.0.5",
     "@heymarco/spacer": "^1.0.6"
   }

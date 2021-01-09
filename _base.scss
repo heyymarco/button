@@ -3,22 +3,22 @@
 
 
 // development:
-@use "node_modules/@heymarco/sass-class-template/index" as *;
-@use "node_modules/@heymarco/sass-selector/index"       as selector;
-@use "node_modules/@heymarco/control/index"             as base;
-@use "node_modules/@heymarco/element/index"             as element;
-@use "node_modules/@heymarco/colors/index"              as color;
-@use "node_modules/@heymarco/spacer/index"              as spacer;
-@use "node_modules/@heymarco/border/index"              as border;
+// @use "node_modules/@heymarco/sass-class-template/index" as *;
+// @use "node_modules/@heymarco/sass-selector/index"       as selector;
+// @use "node_modules/@heymarco/control/index"             as base;
+// @use "node_modules/@heymarco/element/index"             as element;
+// @use "node_modules/@heymarco/colors/index"              as color;
+// @use "node_modules/@heymarco/spacer/index"              as spacer;
+// @use "node_modules/@heymarco/border/index"              as border;
 
 // production:
-// @use "../../../node_modules/@heymarco/sass-class-template/index" as *;
-// @use "../../../node_modules/@heymarco/sass-selector/index"       as selector;
-// @use "../../../node_modules/@heymarco/control/index"             as base;
-// @use "../../../node_modules/@heymarco/element/index"             as element;
-// @use "../../../node_modules/@heymarco/colors/index"              as color;
-// @use "../../../node_modules/@heymarco/spacer/index"              as spacer;
-// @use "../../../node_modules/@heymarco/border/index"              as border;
+@use "../../../node_modules/@heymarco/sass-class-template/index" as *;
+@use "../../../node_modules/@heymarco/sass-selector/index"       as selector;
+@use "../../../node_modules/@heymarco/control/index"             as base;
+@use "../../../node_modules/@heymarco/element/index"             as element;
+@use "../../../node_modules/@heymarco/colors/index"              as color;
+@use "../../../node_modules/@heymarco/spacer/index"              as spacer;
+@use "../../../node_modules/@heymarco/border/index"              as border;
 
 
 
@@ -86,6 +86,11 @@ $cssvar: make-cssvar($var-prefix, $var-prefix-base);
 /*addn*/$gap-y-sm           : calc(var(#{$cssvar}padding-y-sm) * 0.35)      !default;
 /*addn*/$gap-x-lg           : calc(var(#{$cssvar}padding-x-lg) * 0.35)      !default;
 /*addn*/$gap-y-lg           : calc(var(#{$cssvar}padding-y-lg) * 0.35)      !default;
+
+/*addn*/$theme-default              : secondary                             !default;
+/*addn*/$theme-default-outline      : secondary                             !default;
+/*addn*/$theme-default-link         : primary                               !default;
+/*addn*/$theme-default-link-outline : primary                               !default;
 
 
 
@@ -216,7 +221,10 @@ $cssvar: make-cssvar($var-prefix, $var-prefix-base);
 
 
     /* begin: variant-size: gap-x, gap-y */
-    @each $size in (sm, lg) { @include selector.append("." + $size) {
+    @each $size in (sm, lg) { @include variant-of($alias, $size) {
+        @extend #{base.$alias}_#{$size};
+
+
         column-gap  : var(#{$cssvar}gap-x-#{$size});
         row-gap     : var(#{$cssvar}gap-y-#{$size});
     }}
@@ -224,32 +232,42 @@ $cssvar: make-cssvar($var-prefix, $var-prefix-base);
 
 
 
-    /* begin: variant-outline */
-    @at-root { #{$alias}-outline {
-        @each $theme-name, $theme-color in color.$themes { @include selector.append("." + $theme-name) {
-            #{$cssvar}backg         : rgba(255, 255, 255, 0); // transparent white
+    /* begin: variant-theme: box-shadow-focus */
+    @each $theme-name, $theme-color in color.$themes { @include variant-of($alias, $theme-name) {
+        @extend #{base.$alias}_#{$theme-name};
+    }}
+    /* end: variant-theme: box-shadow-focus */
 
-            #{$cssvar}color         : hsl(
-                calc(var(#{element.$cssvar}backg-#{$theme-name}-h) * 1deg),
-                calc(var(#{element.$cssvar}backg-#{$theme-name}-s) * 100%),
-                calc(var(#{element.$cssvar}backg-#{$theme-name}-l) * 100%)
+
+
+    /* begin: variant-outline */
+    @include variant-of($alias, "outline") {
+        @at-root { #{$alias}-outline-apply {
+            #{$cssvar}color-swap    : hsl(
+                calc(var(#{element.$cssvar}backg-h) * 1deg),
+                calc(var(#{element.$cssvar}backg-s) * 100%),
+                calc(var(#{element.$cssvar}backg-l) * 100%)
             );
 
-            border-color            : var(#{$cssvar}color);
+            @include selector.append-not(".link") {
+                background  : var(#{$cssvar}backg-gradient);
+            }
+            color           : var(#{$cssvar}color-swap);
+            border-color    : var(#{$cssvar}color-swap);
         }}
-    }}
-    @include selector.append(".outline") {
+
+
         @include state-not-hover {
         @include state-not-active {
-            @extend #{$alias}-outline; // untouched => outline set
+            @extend #{$alias}-outline-apply; // untouched => outline set
         }}
         @include state-disabled {
         @include state-not-active {
-            @extend #{$alias}-outline; // inactive disabled => hover => outline set
+            @extend #{$alias}-outline-apply; // inactive disabled => hover => outline set
         }}
 
         @include selector.append(".link") {
-            @extend #{$alias}-outline; // link => outline always set
+            @extend #{$alias}-outline-apply; // link => outline always set
         }
     }
     /* end: variant-outline */
@@ -257,40 +275,74 @@ $cssvar: make-cssvar($var-prefix, $var-prefix-base);
 
 
     /* begin: variant-link */
-    @include selector.append(".link") {
-        @each $theme-name, $theme-color in color.$themes { @include selector.append("." + $theme-name) {
-            #{$cssvar}backg         : rgba(255, 255, 255, 0); // transparent white
+    @include variant-of($alias, "link") {
+        #{$cssvar}color-swap    : hsl(
+            calc(var(#{element.$cssvar}backg-h) * 1deg),
+            calc(var(#{element.$cssvar}backg-s) * 100%),
+            calc(var(#{element.$cssvar}backg-l) * 100%)
+        );
 
-            #{$cssvar}color         : hsl(
-                calc(var(#{element.$cssvar}backg-#{$theme-name}-h) * 1deg),
-                calc(var(#{element.$cssvar}backg-#{$theme-name}-s) * 100%),
-                calc(var(#{element.$cssvar}backg-#{$theme-name}-l) * 100%)
-            );
-        }}
-
+        background          : transparent;
+        color               : var(#{$cssvar}color-swap);
         @include selector.append-not(".outline") {
-            border-style            : none;
+            border-style    : none;
         }
-
-
+    
         
-        #{$cssvar}backg-gradient    : linear-gradient(transparent, transparent);
-
+    
         #{$cssvar}text-decoration   : underline;
         #{$cssvar}lineheight        : 1;
-
+    
         #{$cssvar}padding-x         : var(#{spacer.$cssvar}xs);
         #{$cssvar}padding-y         : var(#{spacer.$cssvar}xs);
         #{$cssvar}padding-x-sm      : var(#{spacer.$cssvar}xs);
         #{$cssvar}padding-y-sm      : var(#{spacer.$cssvar}xs);
         #{$cssvar}padding-x-lg      : var(#{spacer.$cssvar}xs);
         #{$cssvar}padding-y-lg      : var(#{spacer.$cssvar}xs);
-
+    
         #{$cssvar}border-radius     : var(#{border.$radius-cssvar}xs);
         #{$cssvar}border-radius-sm  : var(#{border.$radius-cssvar}xs);
         #{$cssvar}border-radius-lg  : var(#{border.$radius-cssvar}xs);
     }
     /* end: variant-link */
+
+
+
+    /* begin: theme-default */
+    @include color.has-no-theme {
+        @if ($theme-default != null) {
+            @include color.themes-validate-name($theme-default);
+    
+            @include selector.append-not(".outline, .link") {
+                @extend #{$alias}_#{$theme-default};
+            }
+        }
+    
+        @if ($theme-default-outline != null) {
+            @include color.themes-validate-name($theme-default-outline);
+    
+            @include selector.append(".outline") { @include selector.append-not(".link") {
+                @extend #{$alias}_#{$theme-default-outline};
+            }}
+        }
+    
+        @if ($theme-default-link != null) {
+            @include color.themes-validate-name($theme-default-link);
+    
+            @include selector.append(".link") { @include selector.append-not(".outline") {
+                @extend #{$alias}_#{$theme-default-link};
+            }}
+        }
+    
+        @if ($theme-default-link-outline != null) {
+            @include color.themes-validate-name($theme-default-link-outline);
+    
+            @include selector.append(".outline.link") {
+                @extend #{$alias}_#{$theme-default-link-outline};
+            }
+        }
+    }
+    /* end: theme-default */
 }
 @mixin style($cssvar: $cssvar) {
     @include _style(true, $cssvar);
