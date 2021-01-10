@@ -23,7 +23,7 @@
 
 
 $alias              : "%button-base"                        !default;
-$class              : "button, .btn, a.link"                !default;
+$class              : ".btn"                                !default;
 $var-root           : base.$var-root                        !default;
 $var-prefix         : "btn"                                 !default;
 $var-prefix-base    : ""                                    !default;
